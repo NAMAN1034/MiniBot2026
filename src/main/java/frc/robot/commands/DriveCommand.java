@@ -39,10 +39,6 @@ public class DriveCommand extends Command {
     //controller axes fix for xbox
     y = -y;
 
-    // Optional: keep strafe consistent
-    // (depends on driver preference)
-    x = x;
-
     x *= maxSpeed;
     y *= maxSpeed;
     rot *= maxSpeed;
