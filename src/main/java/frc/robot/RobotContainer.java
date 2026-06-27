@@ -1,20 +1,19 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-import frc.robot.Constants;
-import frc.robot.commands.DriveCommand;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 
 public class RobotContainer {
 
-    // Controllers
+    //controllers
     private final CommandXboxController driverController =
-            new CommandXboxController(Constants.kDriverControllerPort);
+            new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
 
-    // Subsystems
+    //ubsystems
     private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
     public RobotContainer() {
 
@@ -22,9 +21,9 @@ public class RobotContainer {
         driveSubsystem.setDefaultCommand(
             new DriveCommand(
                 driveSubsystem,
-                () -> -driverController.getLeftY(),   // Forward/Backward
-                () -> driverController.getLeftX(),    // Strafe
-                () -> driverController.getRightX()    // Rotation
+                () -> -driverController.getLeftY(),//forward/backward
+                () -> driverController.getLeftX(),//strafe
+                () -> driverController.getRightX()//rotation
             )
         );
 
@@ -33,16 +32,16 @@ public class RobotContainer {
 
     private void configureBindings() {
 
-        // Right trigger -> Intake
-      /*driverController.rightTrigger()
+        //right trigger is intake
+        driverController.rightTrigger()
                 .whileTrue(new IntakeCommand(intakeSubsystem, true));
 
-        // Left trigger -> Eject
+        //left trigger is eject
         driverController.leftTrigger()
                 .whileTrue(new IntakeCommand(intakeSubsystem, false));
     }
 
-    public Command getAutonomousCommand() {
+    /*public Command getAutonomousCommand() {
         return new AutoCommand(driveSubsystem, intakeSubsystem);
     }*/
 }

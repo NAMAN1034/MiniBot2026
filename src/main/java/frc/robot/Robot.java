@@ -37,7 +37,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        // Nothing needed; scheduler handles everything
     }
 
     @Override
@@ -49,7 +48,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        // Nothing needed; scheduler handles everything
     }
 
     @Override
@@ -59,6 +57,5 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testPeriodic() {
-        // Optional: subsystem testing via commands
     }
 }
