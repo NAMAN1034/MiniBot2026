@@ -1,85 +1,70 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.DriveConstants;
-//import frc.robot.commands.DriveCommand;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkBase.PersistMode;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  // motor
-  private final PWMSparkMax frontLeftMotor =
-      new PWMSparkMax(DriveConstants.FrontLeftCanId);
+    private final SparkMax frontLeft;
+    private final SparkMax frontRight;
+    private final SparkMax rearLeft;
+    private final SparkMax rearRight;
 
-  private final PWMSparkMax frontRightMotor =
-      new PWMSparkMax(DriveConstants.FrontRightCanId);
+    private final MecanumDrive drive;
 
-  private final PWMSparkMax backLeftMotor =
-      new PWMSparkMax(DriveConstants.BackLeftCanId);
+    public DriveSubsystem() {
 
-  private final PWMSparkMax backRightMotor =
-      new PWMSparkMax(DriveConstants.BackRightCanId);
+        frontLeft = new SparkMax(DriveConstants.kFrontLeftID, MotorType.kBrushless);
+        frontRight = new SparkMax(DriveConstants.kFrontRightID, MotorType.kBrushless);
+        rearLeft = new SparkMax(DriveConstants.kRearLeftID, MotorType.kBrushless);
+        rearRight = new SparkMax(DriveConstants.kRearRightID, MotorType.kBrushless);
 
-  // WPILib mecanum helper
-  private final MecanumDrive drive;
+        SparkMaxConfig leftConfig = new SparkMaxConfig();
+        SparkMaxConfig rightConfig = new SparkMaxConfig();
 
-  public DriveSubsystem() {
+        leftConfig.inverted(false);
+        rightConfig.inverted(true);
 
-    //motor direction stuff (may need to be changed later)
-    frontLeftMotor.setInverted(false);
-    backLeftMotor.setInverted(false);
-    frontRightMotor.setInverted(false);
-    backRightMotor.setInverted(false);
+        frontLeft.configure(leftConfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
 
-    //drive
-    drive = new MecanumDrive(
-        frontLeftMotor,
-        backLeftMotor,
-        frontRightMotor,
-        backRightMotor
-    );
-  }
+        rearLeft.configure(leftConfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
 
-  /**
-   * Main drive method used by DriveCommand
-   * @param x sideways (-1 to 1)
-   * @param y forward/back (-1 to 1)
-   * @param rot rotation (-1 to 1)
-   */
-  public void drive(double x, double y, double rot) {
+        frontRight.configure(rightConfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
 
-    // input shaping
-    x = applyDeadband(x);
-    y = applyDeadband(y);
-    rot = applyDeadband(rot);
+        rearRight.configure(rightConfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
 
-    // Optional: cube inputs for finer low-speed control
-    x = cubeInput(x);
-    y = cubeInput(y);
-    rot = cubeInput(rot);
+        drive = new MecanumDrive(
+                frontLeft,
+                rearLeft,
+                frontRight,
+                rearRight
+        );
 
-    // WPILib mecanum expects:
-    // y = forward, x = strafe, rot = rotation
-    drive.driveCartesian(y, x, rot);
-  }
+        drive.setDeadband(0.05);
+        drive.setSafetyEnabled(true);
+    }
 
-  public void stop() {
-    drive.stopMotor();
-  }
+    public void drive(double xSpeed, double ySpeed, double rot) {
+        drive.driveCartesian(xSpeed, ySpeed, rot);
+    }
 
-  // INPUT PROCESSING
-  private double applyDeadband(double value) {
-    return Math.abs(value) < 0.1 ? 0.0 : value;
-  }
-
-  private double cubeInput(double value) {
-    return value * value * value;
-  }
-
-  @Override
-  public void periodic() {
-    //nothing needed yet
-  }
+    public void stop() {
+        drive.driveCartesian(0, 0, 0);
+    }
 }

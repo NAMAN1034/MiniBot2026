@@ -1,59 +1,61 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.DriveSubsystem;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
-import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveCommand extends Command {
 
-  private final DriveSubsystem driveSubsystem;
+    private final DriveSubsystem driveSubsystem;
 
-  private final DoubleSupplier xSupplier;
-  private final DoubleSupplier ySupplier;
-  private final DoubleSupplier rotSupplier;
+    //live joystick inputs for x, y, and rotation
+    private final DoubleSupplier xSpeedSupplier;//strafe
+    private final DoubleSupplier ySpeedSupplier;//forward/back
+    private final DoubleSupplier rotSupplier;//rotation
 
-  public DriveCommand(
-      DriveSubsystem driveSubsystem,
-      DoubleSupplier xSupplier,
-      DoubleSupplier ySupplier,
-      DoubleSupplier rotSupplier
-  ) {
+    //limit full speed during tests
+    private static final double MAX_SPEED = 1.0;
 
-    this.driveSubsystem = driveSubsystem;
-    this.xSupplier = xSupplier;
-    this.ySupplier = ySupplier;
-    this.rotSupplier = rotSupplier;
-    addRequirements(driveSubsystem);
-  }
+    public DriveCommand(
+            DriveSubsystem driveSubsystem,
+            DoubleSupplier xSpeedSupplier,
+            DoubleSupplier ySpeedSupplier,
+            DoubleSupplier rotSupplier) {
 
-  @Override
-  public void execute() {
+        this.driveSubsystem = driveSubsystem;
+        this.xSpeedSupplier = xSpeedSupplier;
+        this.ySpeedSupplier = ySpeedSupplier;
+        this.rotSupplier = rotSupplier;
 
-    // RAW INPUTS
-    double x = xSupplier.getAsDouble();
-    double y = ySupplier.getAsDouble();
-    double rot = rotSupplier.getAsDouble();
-    double maxSpeed = 1.0; //can be adjusted for speed scaling
+        addRequirements(driveSubsystem);
+    }
 
-    //controller axes fix for xbox
-    y = -y;
+    @Override
+    public void execute() {
 
-    x *= maxSpeed;
-    y *= maxSpeed;
-    rot *= maxSpeed;
+        //read joystick values every loop
+        double xSpeed = xSpeedSupplier.getAsDouble();
+        double ySpeed = ySpeedSupplier.getAsDouble();
+        double rot = rotSupplier.getAsDouble();
 
-    //sends to subsystem
-    driveSubsystem.drive(x, y, rot);
-  }
+        xSpeed *= MAX_SPEED;
+        ySpeed *= MAX_SPEED;
+        rot *= MAX_SPEED;
 
-  @Override
-  public void end(boolean interrupted) {
-    driveSubsystem.stop();
-  }
+        //send to drivetrain
+        driveSubsystem.drive(xSpeed, ySpeed, rot);
+    }
 
-  @Override
-  public boolean isFinished() {
-    return false; // default drive command always runs
-  }
+    @Override
+    public void end(boolean interrupted) {
+        driveSubsystem.stop();
+    }
+
+    @Override
+    public boolean isFinished() {
+        //default drive should run forever
+        return false;
+    }
 }

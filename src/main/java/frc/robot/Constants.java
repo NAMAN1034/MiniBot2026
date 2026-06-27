@@ -18,11 +18,13 @@ public final class Constants {
   }
   public static final class DriveConstants {
     //subject to change tmrw after i get the motors and stuff
-    public static final int FrontLeftCanId = 1;
-    public static final int FrontRightCanId = 2;
-    public static final int BackLeftCanId = 3;
-    public static final int BackRightCanId = 4;
-    public static final int IntakeMotorCanId = 5;
+    public static final int kFrontLeftID = 1;
+    public static final int kFrontRightID = 2;
+    public static final int kRearLeftID = 3;
+    public static final int kRearRightID = 4;
+    public static final int kIntakeMotorID = 5;
+
+    public static final int kDriverControllerPort = 0; // TODO: Set the correct port for the driver controller
 
     public static final double kTrackwidthMeters = 1;
     public static final double kWheelDiameterMeters = 1;
