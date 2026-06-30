@@ -22,10 +22,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     public DriveSubsystem() {
 
-        frontLeft = new SparkMax(DriveConstants.kFrontLeftID, MotorType.kBrushless);
-        frontRight = new SparkMax(DriveConstants.kFrontRightID, MotorType.kBrushless);
-        rearLeft = new SparkMax(DriveConstants.kRearLeftID, MotorType.kBrushless);
-        rearRight = new SparkMax(DriveConstants.kRearRightID, MotorType.kBrushless);
+        frontLeft = new SparkMax(DriveConstants.kFrontLeftID, MotorType.kBrushed);
+        frontRight = new SparkMax(DriveConstants.kFrontRightID, MotorType.kBrushed);
+        rearLeft = new SparkMax(DriveConstants.kRearLeftID, MotorType.kBrushed);
+        rearRight = new SparkMax(DriveConstants.kRearRightID, MotorType.kBrushed);
 
         SparkMaxConfig leftConfig = new SparkMaxConfig();
         SparkMaxConfig rightConfig = new SparkMaxConfig();
