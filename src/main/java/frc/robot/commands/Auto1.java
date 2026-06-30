@@ -29,19 +29,19 @@ public class Auto1 extends Command {
         timer.reset();
         timer.start();
 
-        // Start intake immediately
+        //start intake immediately
         intakeSubsystem.intake();
     }
 
     @Override
     public void execute() {
-        // Drive forward while intake runs
+        //drive forward while intake runs
         driveSubsystem.drive(0, DRIVE_SPEED, 0);
     }
 
     @Override
     public void end(boolean interrupted) {
-        // Stop everything safely
+        //stop everything safely
         driveSubsystem.stop();
         intakeSubsystem.stop();
 

@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -11,7 +12,7 @@ public class RobotContainer {
     private final CommandXboxController driverController =
             new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
 
-    //ubsystems
+    //subsystems
     private final DriveSubsystem driveSubsystem = new DriveSubsystem();
     private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
@@ -41,7 +42,7 @@ public class RobotContainer {
                 .whileTrue(new IntakeCommand(intakeSubsystem, false));
     }
 
-    /*public Command getAutonomousCommand() {
-        return new AutoCommand(driveSubsystem, intakeSubsystem);
-    }*/
+    public Command getAutonomousCommand() {
+        return new Auto1(driveSubsystem, intakeSubsystem);
+    }
 }
